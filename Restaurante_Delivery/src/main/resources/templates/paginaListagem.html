@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<style>
+
+/*
+///////////////////////////////////////////////////////////////////////
+                            NAVIGATION BAR
+///////////////////////////////////////////////////////////////////////
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: LightGoldenRodYellow;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    color: transparent;
+    z-index: 2;
+}
+
+.lista-nav {
+    position: sticky;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+}
+
+.logo-nav {
+    width: 10%;
+    float: left;
+}
+
+#logo {
+    width: 85px;
+    float: left;
+    padding: 5px;
+}
+
+#carrinho{
+    width: 30px;
+}
+
+.navegacao {
+    float: right;
+}
+
+.navegacao a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 5px 5px;
+    margin: 13px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navegacao a:hover {
+    color: coral;
+}
+
+/*
+///////////////////////////////////////////////////////////////////////
+                                RODAPÉ
+///////////////////////////////////////////////////////////////////////
+*/
+
+.rodape {
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding: 20px 20px;
+    margin-top: 60px;
+    text-align: center;
+}
+
+.rodape .rdp-direitos {
+    color: black;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.rodape .rodape-superior p {
+    display: inline-block;
+    color: white;
+    vertical-align: middle;
+    margin: 0;
+}
+
+</style>
+
+<body>
+    
+    <nav>
+        <ul class="lista-nav">
+            <div class="logo-nav">
+                <a href="/pratos/listar"><img id="logo" src="/images/logo.png"></a>
+            </div>
+
+            <li sec:authorize="hasRole('USER')" class="navegacao">
+                <a href="/pedidos/carrinho"><img id="carrinho" src="/images/carrinho.png"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="navegacao">
+                <a href="/logout">Logout</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="navegacao">
+                <a href="/login/logar">Entrar</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/usuario/listar">Listar Usuários</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/pratos/formulario">Formulário de Pratos</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="navegacao">
+                <a href="/usuario/formulario">Formulário</a>
+            </li>
+            <li class="navegacao">
+                <a href="/pratos/listar">Pratos</a>
+            </li>
+        </ul>
+    </nav>
+
+
+	<table class="table table-striped table-dark">
+		<thead>
+			<tr>
+				<th scope="col">Código</th>
+				<th scope="col">Nome</th>
+                <th scope="col">Data de Nascimento</th>
+                <th scope="col">Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each ="usuario : ${listaUsuarios}">
+				<td th:text="${usuario.codigoUsuario}"></td>
+				<td th:text="${usuario.nomeUsuario}"></td>
+				<td th:text="${{usuario.dataNascimento}}"></td>
+				<td th:text="${usuario.email}"></td>
+				<td><a th:href="@{/usuario/excluir/{codigo}(codigo = ${usuario.codigoUsuario})}">Excluir</a></td>
+				<td><a th:href="@{/usuario/atualizar/{codigo}(codigo = ${usuario.codigoUsuario})}">Atualizar</a></td>				
+			</tr>
+		</tbody>
+    </table>
+    
+    <!--
+        ///////////////////////////////////////////////////////////////////////
+                                        RODAPÉ
+        ///////////////////////////////////////////////////////////////////////
+    -->
+
+    <footer class="rodape">
+            <div class="rodape-superior">
+                <div>
+                    <p>Avenida do Cheirinho, nº21 Quixadá-Ceará |</p>
+                    <p>Fone: (085) 9 4002-8922</p>
+                </div>
+                <p class="rodape-direitos">&copy; Copyright 2019 | Appetito | Rendley Arnou Xavier</p>
+            </div>
+        </footer>
+</body>
+</html>

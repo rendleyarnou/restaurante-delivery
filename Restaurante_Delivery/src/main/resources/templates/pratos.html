@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Appetito</title>
+</head>
+
+<style>
+
+/*
+///////////////////////////////////////////////////////////////////////
+                            NAVIGATION BAR
+///////////////////////////////////////////////////////////////////////
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: LightGoldenRodYellow;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    color: transparent;
+    z-index: 2;
+}
+
+.lista-nav {
+    position: sticky;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+}
+
+.logo-nav {
+    width: 10%;
+    float: left;
+}
+
+#logo {
+    width: 85px;
+    float: left;
+    padding: 5px;
+}
+
+#carrinho{
+    width: 30px;
+}
+
+.navegacao {
+    float: right;
+}
+
+.navegacao a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 5px 5px;
+    margin: 13px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navegacao a:hover {
+    color: coral;
+}
+
+/*
+///////////////////////////////////////////////////////////////////////
+                                RODAPÉ
+///////////////////////////////////////////////////////////////////////
+*/
+
+.rodape {
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding: 20px 20px;
+    margin-top: 60px;
+    text-align: center;
+}
+
+.rodape .rdp-direitos {
+    color: black;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.rodape .rodape-superior p {
+    display: inline-block;
+    color: white;
+    vertical-align: middle;
+    margin: 0;
+}
+
+/*
+///////////////////////////////////////////////////////////////////////
+                                PRATOS
+///////////////////////////////////////////////////////////////////////
+*/
+
+.pratos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ch-grid {
+    margin: 10px 0 0 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.ch-grid:after, .ch-item:before {
+    content: '';
+    display: table;
+}
+
+.ch-grid:after {
+    clear: both;
+}
+
+.ch-grid li {
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    margin: 30px 110px 30px;
+}
+
+.ch-item:hover .ch-thumb {
+    box-shadow: inset 0 0 0 15px rgba(255, 255, 255, 0.5), 0 1px 3px rgba(0, 0, 0, 0.2);
+    transform: rotate(-110deg);
+}
+
+.ch-item {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    cursor: default;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.ch-info {
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    border-radius: 50%;
+    overflow: hidden;
+    background: hsl(0, 60%, 45%);
+    box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.ch-info img {
+    width: 30%;
+    padding: 10px;
+}
+
+.ch-info p {
+    color: #fff;
+    padding: 10px 5px;
+    font-style: italic;
+    margin: 0 30px;
+    font-size: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.ch-thumb {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    box-shadow: inset 0 0 0 15px rgba(255, 255, 255, 0.5);
+    transform-origin: 95% 40%;
+    transition: all 0.3s ease-in-out;
+}
+
+.ch-thumb:after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    border-radius: 50%;
+    top: 40%;
+    left: 95%;
+    margin: -4px 0 0 -4px;
+    background: radial-gradient(ellipse at center, rgba(14, 14, 14, 1) 0%, rgba(125, 126, 125, 1) 100%);
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.9);
+}
+
+.prato {
+    width: 100%;
+    height: 100%;
+}
+
+</style>
+
+<body>
+  <!--
+    ///////////////////////////////////////////////////////////////////////
+                                NAVIGATION BAR
+    ///////////////////////////////////////////////////////////////////////
+  -->
+
+  <nav>
+        <ul class="lista-nav">
+            <div class="logo-nav">
+                <a href="/pratos/listar"><img id="logo" src="/images/logo.png"></a>
+            </div>
+
+            <li sec:authorize="hasRole('USER')" class="navegacao">
+                <a href="/pedidos/carrinho"><img id="carrinho" src="/images/carrinho.png"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="navegacao">
+                <a href="/logout">Logout</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="navegacao">
+                <a href="/login/logar">Entrar</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/usuario/listar">Listar Usuários</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/pratos/formulario">Formulário de Pratos</a>
+            </li>
+            <li class="navegacao">
+                <a href="/usuario/formulario">Formulário</a>
+            </li>
+            <li class="navegacao">
+                <a href="/pratos/listar">Pratos</a>
+            </li>
+        </ul>
+    </nav>
+
+  <section class="pratos">
+    <div>
+      <ul class="ch-grid">
+        <li th:each ="prato : ${listaDePratos}">
+          <div class="ch-item">
+            <div class="ch-info">
+              <img src="../static/imgs/logo.png" alt="Appetito">
+              <p th:text="${prato.nomePrato}"></p>
+              <p th:text="'R$:'+${prato.preco}"></p>
+              <a th:href="@{/pedidos/adicionar/{prat}(prat = ${prato})}"><button>Adicionar ao Carrinho</button></a>
+              <a th:href="@{/pedidos/remover/{codigo}(codigo = ${prato.codigoPrato})}"><button>Remover do Carrinho</button></a>
+            </div>
+            <div class="ch-thumb">
+              <img class="prato" th:src="@{'/images/'+${prato.nomePrato}+.png}">
+            </div>
+          </div>
+          <br>
+          <a sec:authorize="hasRole('ADMIN')" th:href="@{/pratos/excluir/{codigo}(codigo = ${prato.codigoPrato})}"><button>Excluir</button></a>
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!--
+    ///////////////////////////////////////////////////////////////////////
+                                    RODAPÉ
+    ///////////////////////////////////////////////////////////////////////
+  -->
+
+  <footer class="rodape">
+    <div class="rodape-superior">
+      <div>
+        <p>Avenida do Cheirinho, nº21 Quixadá-Ceará |</p>
+        <p>Fone: (085) 9 4002-8922</p>
+      </div>
+      <p class="rodape-direitos">&copy; Copyright 2019 | Appetito | Rendley Arnou Xavier</p>
+    </div>
+  </footer>
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html >
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Appetito</title>
+</head>
+
+<style>
+
+/*
+///////////////////////////////////////////////////////////////////////
+                            NAVIGATION BAR
+///////////////////////////////////////////////////////////////////////
+*/
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: LightGoldenRodYellow;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    color: transparent;
+    z-index: 2;
+}
+
+.lista-nav {
+    position: sticky;
+    list-style-type: none;
+    overflow: hidden;
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+}
+
+.logo-nav {
+    width: 10%;
+    float: left;
+}
+
+#logo {
+    width: 85px;
+    float: left;
+    padding: 5px;
+}
+
+#carrinho{
+    width: 30px;
+}
+
+.navegacao {
+    float: right;
+}
+
+.navegacao a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 5px 5px;
+    margin: 13px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navegacao a:hover {
+    color: coral;
+}
+
+/*
+///////////////////////////////////////////////////////////////////////
+                                RODAPÉ
+///////////////////////////////////////////////////////////////////////
+*/
+
+.rodape {
+    background-color: hsl(0, 60%, 45%);
+    width: 97%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    padding: 20px 20px;
+    margin-top: 60px;
+    text-align: center;
+}
+
+.rodape .rdp-direitos {
+    color: black;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.rodape .rodape-superior p {
+    display: inline-block;
+    color: white;
+    vertical-align: middle;
+    margin: 0;
+}
+
+/*
+///////////////////////////////////////////////////////////////////////
+                            FORMULÁRIO
+///////////////////////////////////////////////////////////////////////
+*/
+
+.div-form {
+    width: 100%;
+    height: 100%;
+    background-color: hsl(0, 60%, 45%);
+    display: flex;
+    justify-content: center;
+}
+
+.formulario {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    font-family: "Arial", Times, serif;
+}
+
+.formulario h1 {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 50px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+}
+
+.formInput {
+    color: #292929;
+    font-size: 18px;
+    background-color: #E9E9E9;
+    border: 1px solid #E9E9E9;
+    border-radius: 30px;
+    height: 40px;
+    margin-bottom: 20px;
+    text-indent: 20px;
+}
+
+.formButton1 {
+    font-size: 18px;
+    color: black;
+    float: left;
+    width: 20%;
+    height: 40px;
+    margin-left: 25%;
+    margin-right: 5%;
+    margin-bottom: 20px;
+    cursor: pointer;
+    background: green;
+    border: none;
+    border-radius: 100px;
+}
+
+.formButton2 {
+    font-size: 18px;
+    color: black;
+    float: left;
+    width: 20%;
+    height: 40px;
+    margin-left: 5%;
+    margin-right: 25%;
+    margin-bottom: 20px;
+    cursor: pointer;
+    background: yellow;
+    border: none;
+    border-radius: 100px;
+}
+
+</style>
+
+<body>
+
+    <nav>
+        <ul class="lista-nav">
+            <div class="logo-nav">
+                <a href="/pratos/listar"><img id="logo" src="/images/logo.png"></a>
+            </div>
+
+            <li sec:authorize="hasRole('USER')" class="navegacao">
+                <a href="/pedidos/carrinho"><img id="carrinho" src="/images/carrinho.png"></a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="navegacao">
+                <a href="/logout">Logout</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="navegacao">
+                <a href="/login/logar">Entrar</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/usuario/listar">Listar Usuários</a>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')" class="navegacao">
+                <a href="/pratos/formulario">Formulário de Pratos</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="navegacao">
+                <a href="/usuario/formulario">Formulário</a>
+            </li>
+            <li class="navegacao">
+                <a href="/pratos/listar">Pratos</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!--
+        ///////////////////////////////////////////////////////////////////////
+                                    Gerenciar Pratos
+        ///////////////////////////////////////////////////////////////////////
+    -->
+
+    <div class="div-form">
+        <form class="formulario" action="/pratos/salvar" method="post" th:object="${prato}" enctype="multipart/form-data">
+            <h1>Formulário de Pratos</h1>
+            <input class="formInput" type="text" placeholder="Nome" name="nomePrato" required />
+            <input class="formInput" type="number" placeholder="Preço" name="preco" required />
+            <input class="formInput" type="file" name="imagem" required />
+            <div>
+                <button class="formButton1" type="submit">Enviar</button>
+                <button class="formButton2" type="reset">Limpar</button>
+            </div>
+        </form>
+    </div>
+
+    <!--
+        ///////////////////////////////////////////////////////////////////////
+                                        RODAPÉ
+        ///////////////////////////////////////////////////////////////////////
+    -->
+
+    <footer class="rodape">
+        <div class="rodape-superior">
+            <div>
+                <p>Avenida do Cheirinho, nº21 Quixadá-Ceará |</p>
+                <p>Fone: (085) 9 4002-8922</p>
+            </div>
+            <p class="rodape-direitos">&copy; Copyright 2019 | Appetito | Rendley Arnou Xavier</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
